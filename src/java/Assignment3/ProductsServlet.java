@@ -102,6 +102,40 @@ public class ProductsServlet extends HttpServlet {
     }
 
     /**
+     * doPut - Updates given row
+     * 
+     * @param request - the request object
+     * @param response - the response object
+     */
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("Content-Type", "text/plain-text");
+        try (PrintWriter out = response.getWriter()) {
+            if(!request.getParameterNames().hasMoreElements()) {
+                // No parameters
+                response.setStatus(500);
+                out.println("Required parameters missing. (id, name, description, quantity)");
+            } else {
+                int result = doUpdate("UPDATE products SET name='?', description='?', quantity=? WHERE id=?",
+                        request.getParameter("name"),
+                        request.getParameter("description"),
+                        request.getParameter("quantity"),
+                        request.getParameter("id"));
+            
+                if(result!=0) {
+                    out.println("http://localhost:8080/CPD-4414-Assignment03/products?id="+request.getParameter("id"));
+                } else {
+                    response.setStatus(500);
+                    out.println("Update failed.");
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ProductsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+
+    /**
      * getResults - Get the row(s) requested
      *
      * @param query - SQL statement to execute
