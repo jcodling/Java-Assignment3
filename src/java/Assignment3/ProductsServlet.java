@@ -81,7 +81,6 @@ public class ProductsServlet extends HttpServlet {
 //                            response.setStatus(500);
 //                            out.println("Insert failed. ("+idOfLast+")");
 //                        }
-
                         idOfLast = getIdByName(request.getParameter("name"));
 
                         if (idOfLast == 0) {
@@ -104,7 +103,7 @@ public class ProductsServlet extends HttpServlet {
 
     /**
      * getResults - Get the row(s) requested
-     * 
+     *
      * @param query - SQL statement to execute
      * @param params - Parameters to insert into query
      * @return - JSON formatted String of results
@@ -134,8 +133,9 @@ public class ProductsServlet extends HttpServlet {
     }
 
     /**
-     * doUpdate - Execute the provided query and return the number of rows effected
-     * 
+     * doUpdate - Execute the provided query and return the number of rows
+     * effected
+     *
      * @param query - SQL query to execute
      * @param params - Parameters to be added to the query
      * @return - number of rows effected
@@ -161,7 +161,7 @@ public class ProductsServlet extends HttpServlet {
 
     /**
      * getIdByName - Get ID of product where the name is the name provided
-     * 
+     *
      * @param name - the name of the product which we want the ID of
      * @return - The ID of the product of the found name
      */
