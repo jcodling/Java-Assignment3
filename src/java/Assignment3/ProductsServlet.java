@@ -116,7 +116,7 @@ public class ProductsServlet extends HttpServlet {
                 response.setStatus(500);
                 out.println("Required parameters missing. (id, name, description, quantity)");
             } else {
-                int result = doUpdate("UPDATE products SET name='?', description='?', quantity=? WHERE id=?",
+                int result = doUpdate("UPDATE products SET name=?, description=?, quantity=? WHERE productId=?",
                         request.getParameter("name"),
                         request.getParameter("description"),
                         request.getParameter("quantity"),
@@ -133,7 +133,13 @@ public class ProductsServlet extends HttpServlet {
             Logger.getLogger(ProductsServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /**
+     * doDelete - Delete row of given Id
+     * 
+     * @param request - the request object
+     * @param response - the response object
+     */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
         response.setHeader("Content-Type", "text/plain-text");
@@ -142,7 +148,7 @@ public class ProductsServlet extends HttpServlet {
                 response.setStatus(500);
                 out.println("Required parameters missing. (id)");
             } else {
-                int result = doUpdate("DELETE * FROM products WHERE id=?",request.getParameter("id"));
+                int result = doUpdate("DELETE FROM products WHERE productId=?",request.getParameter("id"));
                 if(result==0) {
                     response.setStatus(500);
                 }
