@@ -77,7 +77,7 @@ public class ProductsServlet extends HttpServlet {
 //                        out.println("Insert failed. ("+idOfLast+")");
 //                    }
                     
-                    idOfLast = getId(request.getParameter("name"));
+                    idOfLast = getIdByName(request.getParameter("name"));
                     
                     if(idOfLast == 0) {
                         response.setStatus(500);
@@ -139,7 +139,7 @@ public class ProductsServlet extends HttpServlet {
         return numChanges;
     }
     
-    private int getId(String name) {
+    private int getIdByName(String name) {
         int returnedId = 0;
         try (Connection conn = Credentials.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM products WHERE name='"+name+"'");
