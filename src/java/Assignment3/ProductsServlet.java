@@ -134,6 +134,23 @@ public class ProductsServlet extends HttpServlet {
         }
     }
     
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("Content-Type", "text/plain-text");
+        try (PrintWriter out = response.getWriter()) {
+            if(!request.getParameterNames().hasMoreElements()) {
+                response.setStatus(500);
+                out.println("Required parameters missing. (id)");
+            } else {
+                int result = doUpdate("DELETE * FROM products WHERE id=?",request.getParameter("id"));
+                if(result==0) {
+                    response.setStatus(500);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ProductsServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * getResults - Get the row(s) requested
