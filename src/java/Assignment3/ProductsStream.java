@@ -17,6 +17,7 @@ import javax.json.stream.JsonGeneratorFactory;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -70,6 +71,34 @@ public class ProductsStream {
             Logger.getLogger(ProductsStream.class.getName()).log(Level.SEVERE, null, ex);
         }
         return Response.status(500).build();
+    }
+    
+    @PUT
+    @Path("{id}")
+    @Consumes("application/json")
+    public Response doUpdate(String str, @PathParam("id") String id) {
+        JsonReader reader = Json.createReader(new StringReader(str));
+        JsonObject json = reader.readObject();
+
+        try (Connection conn = Credentials.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE products SET name='"+json.getString("name")+"',"+
+                            "description='"+json.getString("description")+"',"+
+                            "quantity="+String.valueOf(json.getInt("quantity"))+
+                            " WHERE productId="+id,
+                    Statement.RETURN_GENERATED_KEYS);
+            
+            try {
+                pstmt.executeUpdate();
+            } catch (SQLException ex) {
+                return Response.status(500).build();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductsStream.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Response.ok("http://localhost:8080/CPD-4414-Assignment03/products/"+
+                id,
+                MediaType.TEXT_HTML).build();
     }
 
     private String getResults(String query, String... params) {
