@@ -62,8 +62,8 @@ public class ProductsStream {
             pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             if(rs.next()) {
-                return Response.ok("<a>http://localhost:8080/CPD-4414-Assignment03/stream/"+
-                        rs.getInt(1)+"</a>",
+                return Response.ok("http://localhost:8080/CPD-4414-Assignment03/stream/"+
+                        rs.getInt(1),
                         MediaType.TEXT_HTML).build();
             }
         } catch (SQLException ex) {
