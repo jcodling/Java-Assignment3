@@ -114,7 +114,6 @@ public class ProductsStream {
                     "DELETE FROM products WHERE productId="+id);
             try {
                 pstmt.executeUpdate();
-                System.out.println(pstmt);
             } catch (SQLException ex) {
                 return Response.status(500).build();
             }
