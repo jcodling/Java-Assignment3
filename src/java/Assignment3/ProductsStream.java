@@ -52,14 +52,14 @@ public class ProductsStream {
 
         try (Connection conn = Credentials.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(
-                    "INSERT INTO products (name, description, quantity) "+
-                            "VALUES ("+
-                            json.getString("name")+","+
-                            json.getString("description")+","+
-                            String.valueOf(json.getInt("quantity")),
+                    "INSERT INTO products (name,description,quantity)"+
+                            " VALUES ('"+
+                            json.getString("name")+"','"+
+                            json.getString("description")+"',"+
+                            String.valueOf(json.getInt("quantity"))+")",
                     Statement.RETURN_GENERATED_KEYS);
             
-            pstmt.executeQuery();
+            pstmt.executeUpdate();
             ResultSet rs = pstmt.getGeneratedKeys();
             if(rs.next()) {
                 return Response.ok("<a>http://localhost:8080/CPD-4414-Assignment03/stream/"+
