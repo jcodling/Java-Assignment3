@@ -15,6 +15,7 @@ import javax.json.JsonReader;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -67,6 +68,7 @@ public class ProductsStream {
                         rs.getInt(1),
                         MediaType.TEXT_HTML).build();
             }
+            conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProductsStream.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,6 +95,7 @@ public class ProductsStream {
             } catch (SQLException ex) {
                 return Response.status(500).build();
             }
+            conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(ProductsStream.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -101,6 +104,27 @@ public class ProductsStream {
                 MediaType.TEXT_HTML).build();
     }
 
+    
+    @DELETE
+    @Path("{id}")
+    @Consumes("application/json")
+    public Response doDelete(@PathParam("id") String id) {
+        try (Connection conn = Credentials.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "DELETE FROM products WHERE productId="+id);
+            try {
+                pstmt.executeUpdate();
+                System.out.println(pstmt);
+            } catch (SQLException ex) {
+                return Response.status(500).build();
+            }
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductsStream.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Response.ok("", MediaType.TEXT_HTML).build();
+    }
+    
     private String getResults(String query, String... params) {
         StringWriter out = new StringWriter();
         JsonGeneratorFactory factory = Json.createGeneratorFactory(null);
